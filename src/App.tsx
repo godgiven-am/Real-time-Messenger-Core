@@ -16,9 +16,6 @@ function App() {
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
-          <div className="bg-red-500 text-white p-4 rounded-lg shadow-md">
-            Tailwind работает! 🎉
-          </div>
           <h1>Get started</h1>
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
