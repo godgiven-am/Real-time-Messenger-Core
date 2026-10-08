@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addMessage } from "../../store/chatSlice";
+import { addMessage } from "../../../store/chatSlice";
 import { v4 as uuidv4 } from "uuid";
 import styles from "./MessageInput.module.css";
 import { Box, TextField, Button } from "@mui/material";
