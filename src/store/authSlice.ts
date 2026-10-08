@@ -4,9 +4,9 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import {
-  AuthResponse,
-  RegisterPayload,
-  LoginPayload,
+  type AuthResponse,
+  type RegisterPayload,
+  type LoginPayload,
   authApi,
 } from "../services/authApi";
 

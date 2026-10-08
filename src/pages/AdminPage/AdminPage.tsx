@@ -1,4 +1,4 @@
-import { ModerationTable } from "../components/Admin/ModerationTable";
+import { ModerationTable } from "../../components/Admin/ModerationTable";
 
 export const AdminPage = () => {
   return (

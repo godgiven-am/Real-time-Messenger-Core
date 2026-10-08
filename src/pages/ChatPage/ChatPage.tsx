@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, setUsersOnline } from "../store/chatSlice";
-import { useSocket } from "../hooks/useSocket";
-import { MessageList } from "../components/Chat/MessageList/MessageList";
-import { MessageInput } from "../components/Chat/MessageInput/MessageInput";
-import { ConnectionStatus } from "../components/Chat/ConnectionStatus/ConnectionStatus";
-import type { RootState } from "../store";
+import { addMessage, setUsersOnline } from "../../store/chatSlice";
+import { useSocket } from "../../hooks/useSocket";
+import { MessageList } from "../../components/Chat/MessageList/MessageList";
+import { MessageInput } from "../../components/Chat/MessageInput/MessageInput";
+import { ConnectionStatus } from "../../components/Chat/ConnectionStatus/ConnectionStatus";
+import type { RootState } from "../../store";
 import styles from "./ChatPage.module.css";
 import { Container, Box, Typography } from "@mui/material";
 

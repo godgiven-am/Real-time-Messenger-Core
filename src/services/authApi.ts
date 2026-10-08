@@ -7,7 +7,7 @@ const API_URL = "http://localhost:3001/api";
 export type LoginPayload = { email: string; password: string };
 export type RegisterPayload = { email: string; password: string; name: string };
 
-type AuthResponse = z.infer<typeof AuthResponseSchema>;
+export type AuthResponse = z.infer<typeof AuthResponseSchema>;
 
 export const apiClient = axios.create({
   baseURL: API_URL,
