@@ -1,0 +1,16 @@
+.chatPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.onlineStatus {
+  background-color: #f1f5f9;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.onlineText {
+  font-weight: 500;
+  color: #0f172a;
+}
