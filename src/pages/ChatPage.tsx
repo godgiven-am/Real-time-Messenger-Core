@@ -2,18 +2,19 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage, setUsersOnline } from "../store/chatSlice";
 import { useSocket } from "../hooks/useSocket";
-import { MessageList } from "../components/Chat/MessageList";
-import { MessageInput } from "../components/Chat/MessageInput";
+import { MessageList } from "../components/Chat/MessageList/MessageList";
+import { MessageInput } from "../components/Chat/MessageInput/MessageInput";
+import { ConnectionStatus } from "../components/Chat/ConnectionStatus/ConnectionStatus";
 import type { RootState } from "../store";
 import styles from "./ChatPage.module.css";
-import { Container, Typography, Box } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 
 export const ChatPage = () => {
   const dispatch = useDispatch();
   const messages = useSelector((state: RootState) => state.chat.messages);
   const usersOnline = useSelector((state: RootState) => state.chat.usersOnline);
 
-  const socket = useSocket("ws://localhost:3001");
+  const { socket, isConnected } = useSocket("ws://localhost:3001");
 
   useEffect(() => {
     if (!socket) return;
@@ -31,6 +32,12 @@ export const ChatPage = () => {
 
   return (
     <Container maxWidth={false} className={styles.chatPage}>
+      {/* Статус подключения */}
+      <Box className={styles.connectionStatus}>
+        <ConnectionStatus isConnected={isConnected} />
+      </Box>
+
+      {/* Статус онлайн */}
       <Box className={styles.onlineStatus}>
         <Typography variant="body1" className={styles.onlineText}>
           Онлайн: {usersOnline.join(", ") || "Никто"}
