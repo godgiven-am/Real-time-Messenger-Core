@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { Message } from "../types";
 
 interface ChatState {
@@ -12,11 +12,11 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    addMessage: (state, action: PayloadAction<Message>) => {
+    addMessage: (state, action) => {
       state.messages.push(action.payload);
       if (state.messages.length > 200) state.messages.shift();
     },
-    setUsersOnline: (state, action: PayloadAction<string[]>) => {
+    setUsersOnline: (state, action) => {
       state.usersOnline = action.payload;
     },
   },
