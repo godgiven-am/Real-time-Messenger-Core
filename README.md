@@ -1,75 +1,157 @@
-# React + TypeScript + Vite
+# Real‑Time Messenger Core
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Мессенджер в реальном времени с админ‑панелью, системой модерации, комнатами и авторизацией.
 
-Currently, two official plugins are available:
+## О проекте
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Real‑Time Messenger — веб‑приложение для общения в реальном времени. Проект демонстрирует интеграцию React + Redux + Socket.IO с использованием Material‑UI для современного интерфейса.
 
-## React Compiler
+## Функциональность
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Текущая функциональность
 
-## Expanding the ESLint configuration
+- **Чат в реальном времени** — обмен сообщениями между пользователями мгновенно.
+- **Статус онлайн** — отображение списка пользователей, находящихся в сети.
+- **Статус подключения** — индикация состояния соединения с сервером WebSocket.
+- **Анимация сообщений** — плавное появление новых сообщений.
+- **Автоскролл** — автоматическая прокрутка к последнему сообщению.
+- **Админ‑панель** — просмотр всех сообщений с возможностью модерации.
+- **Система модерации** — скрытие/показ сообщений через админ‑панель.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Планируемая функциональность (в разработке)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Создание комнат** — пользователи могут создавать и присоединяться к чатам по названию.
+- **Авторизация** — регистрация и вход через email/пароль или соцсети.
+- **История сообщений** — загрузка предыдущих сообщений при открытии чата.
+- **Уведомления** — звуковые сигналы и браузерные уведомления о новых сообщениях.
+- **Редактирование сообщений** — возможность изменить отправленное сообщение.
+- **Реакции на сообщения** — эмодзи‑реакции.
+- **Поиск по сообщениям** — фильтрация в админ‑панели и в комнатах.
+- **Пагинация** — подгрузка сообщений порциями.
+- **Приватные чаты** — создание отдельных комнат для общения.
+- **Загрузка файлов** — отправка изображений и документов.
+- **Управление комнатами** — администратор может удалять комнаты, банить пользователей.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Детализация новых фич
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Создание комнат
 
-```
+**Функциональность:**
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+- Пользователь может создать новую комнату, введя название.
+- Список доступных комнат отображается на главной странице.
+- Присоединение к комнате — по клику на название.
+- Каждая комната имеет уникальный URL (`/room/:roomId`).
+- В комнате отображается список участников.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Техническая реализация:**
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Бэкенд: Socket.IO `rooms` API для изоляции сообщений по комнатам.
+- Фронтенд: React Router для навигации между комнатами.
+- Хранение данных: MongoDB/PostgreSQL — коллекции `rooms`, `messages`, `users`.
+- Схема комнаты:
+  - `roomId` (уникальный ID);
+  - `name` (название);
+  - `creatorId` (ID создателя);
+  - `createdAt` (дата создания);
+  - `participants` (массив ID пользователей).
 
-```
+### 2. Авторизация
+
+**Функциональность:**
+
+- Регистрация нового пользователя (email, пароль, имя).
+- Вход в систему с email/паролем.
+- Вход через соцсети (Google, GitHub — опционально).
+- JWT‑токен для аутентификации запросов.
+- Защита маршрутов: только авторизованные пользователи могут создавать комнаты и отправлять сообщения.
+- Профиль пользователя: имя, аватар, список созданных комнат.
+
+**Техническая реализация:**
+
+- Бэкенд: Express + Passport.js (для OAuth) + JWT.
+- Фронтенд: формы входа/регистрации с валидацией.
+- Redux store: хранение `user` и `token` в состоянии.
+- Middleware: проверка JWT для защищённых API‑эндпоинтов.
+- Схема пользователя:
+  - `userId`;
+  - `email`;
+  - `passwordHash`;
+  - `name`;
+  - `avatarUrl` (опционально);
+  - `createdRooms` (массив `roomId`).
+
+## Технологии
+
+### Фронтенд
+
+- **React 18** — библиотека для построения пользовательских интерфейсов.
+- **TypeScript** — статическая типизация для надёжности кода.
+- **Vite** — сборщик проекта и dev‑сервер.
+- **Material‑UI (MUI)** — компоненты и стили для современного UI.
+- **Redux Toolkit** — управление состоянием приложения.
+- **React Router Dom** — навигация между страницами и комнатами.
+- **Socket.IO Client** — реальное время через WebSocket.
+- **Axios** — HTTP‑запросы.
+- **UUID** — генерация уникальных ID для сообщений.
+- **Zod** — валидация данных.
+- **Faker.js** — генерация тестовых данных.
+
+### Бэкенд
+
+- **Node.js + Express** — серверная часть.
+- **Socket.IO** — WebSocket‑сервер для реального времени.
+- **MongoDB/PostgreSQL** — хранение истории сообщений, комнат, пользователей.
+- **JWT** — аутентификация пользователей.
+- **Passport.js** — OAuth для входа через соцсети.
+- **bcrypt** — хеширование паролей.
+
+## Архитектура взаимодействия
+
+**Поток создания комнаты:**
+
+1. Пользователь авторизуется.
+2. Нажимает «Создать комнату», вводит название.
+3. Фронтенд отправляет POST‑запрос на `/api/rooms` с `name` и `userId`.
+4. Бэкенд создаёт комнату в БД, возвращает `roomId`.
+5. Клиент подключается к Socket.IO‑комнате с `roomId`.
+6. Пользователь перенаправляется на `/room/:roomId`.
+
+**Поток авторизации:**
+
+1. Пользователь заполняет форму входа (email/пароль).
+2. Фронтенд отправляет POST на `/api/auth/login`.
+3. Бэкенд проверяет учётные данные, генерирует JWT.
+4. Токен сохраняется в `localStorage` и передаётся в заголовках для последующих запросов.
+5. Redux обновляет состояние `user`.
+
+## API‑эндпоинты
+
+### Бэкенд API
+
+- `POST /api/auth/register` — регистрация пользователя.
+- `POST /api/auth/login` — вход в систему.
+- `GET /api/rooms` — список всех комнат.
+- `POST /api/rooms` — создание новой комнаты.
+- `GET /api/rooms/:roomId/messages` — история сообщений комнаты.
+
+### Socket.IO Events
+
+- `join_room` — клиент присоединяется к комнате.
+- `new_message` — отправка сообщения в комнату.
+- `user_joined` — уведомление о новом участнике.
+- `user_left` — уведомление о покинувшем комнату.
+
+## Установка и запуск
+
+### Предварительные требования
+
+- **Node.js** версии 18+
+- **npm** или **yarn**
+
+### Инструкции по запуску
+
+1. Клонируйте репозиторий
+2. Установите зависимости npm install
+3. Запустите dev‑сервер npm run dev
+4. Откройте в браузере: http://localhost:5173
