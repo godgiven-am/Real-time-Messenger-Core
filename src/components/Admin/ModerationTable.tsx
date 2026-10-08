@@ -1,7 +1,18 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import styles from "./ModerationTable.module.css";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Chip,
+  Typography,
+} from "@mui/material";
 
 export const ModerationTable = () => {
   const messages = useSelector((state: RootState) => state.chat.messages);
@@ -14,51 +25,61 @@ export const ModerationTable = () => {
   };
 
   return (
-    <div className={styles.moderationTable}>
-      <h2 className={styles.tableTitle}>Панель модерации</h2>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.tableHeader}>Отправитель</th>
-              <th className={styles.tableHeader}>Сообщение</th>
-              <th className={styles.tableHeader}>Время</th>
-              <th className={styles.tableHeader}>Статус</th>
-              <th className={styles.tableHeader}>Действия</th>
-            </tr>
-          </thead>
-          <tbody>
+    <Paper className={styles.moderationTable}>
+      <Typography variant="h4" className={styles.tableTitle}>
+        Панель модерации
+      </Typography>
+      <TableContainer className={styles.tableContainer}>
+        <Table className={styles.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={styles.tableHeader}>Отправитель</TableCell>
+              <TableCell className={styles.tableHeader}>Сообщение</TableCell>
+              <TableCell className={styles.tableHeader}>Время</TableCell>
+              <TableCell className={styles.tableHeader}>Статус</TableCell>
+              <TableCell className={styles.tableHeader}>Действия</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {messages.map((msg) => (
-              <tr key={msg.id} className={styles.tableRow}>
-                <td className={styles.tableCell}>{msg.sender}</td>
-                <td className={styles.tableCell}>{msg.text}</td>
-                <td className={styles.tableCell}>
+              <TableRow key={msg.id} className={styles.tableRow}>
+                <TableCell className={styles.tableCell}>{msg.sender}</TableCell>
+                <TableCell className={styles.tableCell}>
+                  <Typography noWrap className={styles.tableText}>
+                    {msg.text}
+                  </Typography>
+                </TableCell>
+                <TableCell className={styles.tableCell}>
                   {new Date(msg.timestamp).toLocaleTimeString()}
-                </td>
-                <td className={styles.tableCell}>
-                  <span
+                </TableCell>
+                <TableCell className={styles.tableCell}>
+                  <Chip
+                    label={hiddenMessages.includes(msg.id) ? "Скрыто" : "Видно"}
+                    color={
+                      hiddenMessages.includes(msg.id) ? "error" : "success"
+                    }
                     className={
                       hiddenMessages.includes(msg.id)
                         ? styles.statusHidden
                         : styles.statusVisible
                     }
-                  >
-                    {hiddenMessages.includes(msg.id) ? "Скрыто" : "Видно"}
-                  </span>
-                </td>
-                <td className={styles.tableCell}>
-                  <button
+                  />
+                </TableCell>
+                <TableCell className={styles.tableCell}>
+                  <Button
                     onClick={() => toggleMessageVisibility(msg.id)}
+                    variant="outlined"
+                    size="small"
                     className={styles.actionButton}
                   >
                     {hiddenMessages.includes(msg.id) ? "Показать" : "Скрыть"}
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage, setUsersOnline } from "../store/chatSlice";
 import { useSocket } from "../hooks/useSocket";
@@ -6,6 +6,7 @@ import { MessageList } from "../components/Chat/MessageList";
 import { MessageInput } from "../components/Chat/MessageInput";
 import type { RootState } from "../store";
 import styles from "./ChatPage.module.css";
+import { Container, Typography, Box } from "@mui/material";
 
 export const ChatPage = () => {
   const dispatch = useDispatch();
@@ -29,14 +30,14 @@ export const ChatPage = () => {
   }, [socket, dispatch]);
 
   return (
-    <div className={styles.chatPage}>
-      <div className={styles.onlineStatus}>
-        <span className={styles.onlineText}>
+    <Container maxWidth={false} className={styles.chatPage}>
+      <Box className={styles.onlineStatus}>
+        <Typography variant="body1" className={styles.onlineText}>
           Онлайн: {usersOnline.join(", ") || "Никто"}
-        </span>
-      </div>
+        </Typography>
+      </Box>
       <MessageList />
       <MessageInput />
-    </div>
+    </Container>
   );
 };

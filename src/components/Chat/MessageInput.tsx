@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addMessage } from "../../store/chatSlice";
 import { v4 as uuidv4 } from "uuid";
 import styles from "./MessageInput.module.css";
+import { Box, TextField, Button } from "@mui/material";
 
 export const MessageInput = () => {
   const [text, setText] = useState("");
@@ -24,19 +25,30 @@ export const MessageInput = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.messageInputForm}>
-      <div className={styles.inputContainer}>
-        <input
-          type="text"
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      className={styles.messageInputForm}
+    >
+      <Box display="flex" gap={2} className={styles.inputContainer}>
+        <TextField
+          fullWidth
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Введите сообщение..."
+          variant="outlined"
+          size="medium"
           className={styles.messageInput}
         />
-        <button type="submit" className={styles.sendButton}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={styles.sendButton}
+        >
           Отправить
-        </button>
-      </div>
-    </form>
+        </Button>
+      </Box>
+    </Box>
   );
 };
