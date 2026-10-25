@@ -7,6 +7,7 @@ import { generateToken } from '../utils/jwt';
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, name } = req.body;
+    console.log('[BACKEND] Register attempt:', email);
     // Проверка на существование пользователя
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -17,6 +18,7 @@ export const register = async (req: Request, res: Response) => {
     await user.save();
     // Генерация токена
     const token = generateToken(user);
+    console.log('[BACKEND] User registered:', user._id);
     res.status(201).json({
       user: {
         id: user._id,
@@ -26,6 +28,7 @@ export const register = async (req: Request, res: Response) => {
       token
     });
   } catch (error) {
+    console.error('[BACKEND] Auth error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -34,6 +37,7 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log('[BACKEND] Login attempt:', email);
     // Поиск пользователя
     const user = await User.findOne({ email });
     if (!user) {
@@ -46,6 +50,7 @@ export const login = async (req: Request, res: Response) => {
     }
     // Генерация токена
     const token = generateToken(user);
+    console.log('[BACKEND] Login success:', user._id);
     res.json({
       user: {
         id: user._id,
@@ -55,6 +60,7 @@ export const login = async (req: Request, res: Response) => {
       token
     });
   } catch (error) {
+    console.error('[BACKEND] Auth error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };

@@ -3,13 +3,9 @@ import mongoose from 'mongoose';
 import http from 'http';
 import { Server } from 'socket.io';
 
-import authRoutes from './src/routes/authRoutes';
-
 const PORT = process.env.PORT || 3001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/messenger';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-
-app.use('/api/auth', authRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -41,7 +37,7 @@ mongoose.connect(MONGO_URI)
     });
 
     server.listen(PORT, () => {
-      console.log(`Server running on port \${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
