@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { type AuthResponse, type RegisterPayload, type LoginPayload, authApi } from '../services/authApi';
 
 export interface AuthState {
@@ -21,8 +21,11 @@ export const register = createAsyncThunk<AuthResponse, RegisterPayload>(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await authApi.register(payload);
+      console.log('[AUTH] Register success:', response.user);
+      localStorage.setItem('token', response.token);
       return response;
     } catch (error: any) {
+      console.error('[AUTH] Request failed:', error.response?.data ?? error);
       return rejectWithValue(
         error.response?.data?.message || 'Регистрация не удалась'
       );
@@ -35,8 +38,11 @@ export const login = createAsyncThunk<AuthResponse, LoginPayload>(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await authApi.login(payload);
+      console.log('[AUTH] Login success:', response.user);
+      localStorage.setItem('token', response.token);
       return response;
     } catch (error: any) {
+      console.error('[AUTH] Request failed:', error.response?.data ?? error);
       return rejectWithValue(
         error.response?.data?.message || 'Неверный логин или пароль'
       );

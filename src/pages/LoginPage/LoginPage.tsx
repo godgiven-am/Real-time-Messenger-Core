@@ -13,7 +13,8 @@ import {
   Link,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../store";
+import { useNavigate } from "react-router-dom";
+import type { AppDispatch, RootState } from "../../store";
 import { clearError, login } from "../../store/authSlice";
 
 // Схема валидации Zod
@@ -25,7 +26,8 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { status, error, user } = useSelector((state: RootState) => state.auth);
 
   const {
@@ -44,9 +46,9 @@ export const LoginPage = () => {
   useEffect(() => {
     // Если пользователь уже авторизован, перенаправляем
     if (user) {
-      window.location.href = "/chat";
+      navigate("/chat", { replace: true });
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const onSubmit = (data: LoginFormData) => {
     dispatch(login(data));
@@ -136,7 +138,7 @@ export const LoginPage = () => {
             <Button
               variant="outlined"
               color="secondary"
-              onClick={() => (window.location.href = "/register")}
+              onClick={() => navigate("/register")}
               fullWidth
             >
               Регистрация

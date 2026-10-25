@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -12,7 +13,8 @@ import {
   Link,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../store";
+import { useNavigate } from "react-router-dom";
+import type { AppDispatch, RootState } from "../../store";
 import { register } from "../../store/authSlice";
 
 const registerSchema = z
@@ -30,8 +32,9 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export const RegisterPage = () => {
-  const dispatch = useDispatch();
-  const { status, error } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { status, error, user } = useSelector((state: RootState) => state.auth);
 
   const {
     control,
@@ -46,6 +49,12 @@ export const RegisterPage = () => {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      navigate("/chat", { replace: true });
+    }
+  }, [user, navigate]);
 
   const onSubmit = (data: RegisterFormData) => {
     const { confirmPassword, ...submitData } = data;
@@ -149,7 +158,7 @@ export const RegisterPage = () => {
           <Link
             component="button"
             variant="body2"
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => navigate("/login")}
             sx={{ cursor: "pointer" }}
           >
             Уже есть аккаунт? Войти
