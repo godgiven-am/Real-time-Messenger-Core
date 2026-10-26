@@ -20,12 +20,20 @@ export const socketService = {
         console.log('💬 Новое сообщение от сервера:', message);
       });
     }
-    return socket;
-  },
+        return socket;
+    },
+  
+    joinRoom: (roomId: string) => {
+    socket?.emit('join_room', roomId);
+    },
 
-  sendMessage: (text: string) => {
-    socket?.emit('client_message', { text });
-  },
+    leaveRoom: (roomId: string) => {
+    socket?.emit('leave_room', roomId);
+    },
+
+    sendMessage: (roomId: string, text: string, userId?: string) => {
+    socket?.emit('send_message', { roomId, text, userId });
+    },
 
   disconnect: () => {
     socket?.disconnect();

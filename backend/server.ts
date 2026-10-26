@@ -47,6 +47,41 @@ io.on('connection', (socket: Socket) => {
     });
   });
 
+  // Присоединение к комнате
+  socket.on('join_room', (roomId: string) => {
+    socket.join(roomId);
+    console.log(`👥 Пользователь ${socket.id} присоединился к комнате ${roomId}`);
+    // Уведомляем всех в комнате о новом участнике
+    io.to(roomId).emit('user_joined', {
+      socketId: socket.id,
+      timestamp: new Date()
+    });
+  });
+
+  // Выход из комнаты
+  socket.on('leave_room', (roomId: string) => {
+    socket.leave(roomId);
+    console.log(`👤 Пользователь ${socket.id} покинул комнату ${roomId}`);
+    io.to(roomId).emit('user_left', {
+      socketId: socket.id,
+      timestamp: new Date()
+    });
+  });
+
+  socket.on('send_message', (data: { roomId: string; text: string; userId?: string }) => {
+  const message = {
+    id: Date.now(),
+    text: data.text,
+    userId: data.userId || 'anonymous',
+    timestamp: new Date(),
+    roomId: data.roomId
+  };
+
+  // Отправляем только участникам комнаты
+  io.to(data.roomId).emit('new_message', message);
+  console.log(`💬 Сообщение отправлено в комнату ${data.roomId}:`, data.text);
+});
+
   // Отключение клиента
   socket.on('disconnect', () => {
     console.log('❌ Клиент отключился:', socket.id);
